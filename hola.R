@@ -247,7 +247,7 @@ dimnames(m)
  
  
  
- #read.table
+ #read.table (Lectura de Datos)
  getwd()
  setwd("C:/Users/EILEEN/Desktop/Programación Actuarial lll") #session,  set working directory
  data <- read.csv("Datos_S&P.csv")
@@ -257,6 +257,79 @@ dimnames(m)
  
  data <- read.table("Datos_S&P.csv",F,",")
  data
+ 
+ 
+ 
+ #Applay
+ getwd()
+ setwd("C:/Users/EILEEN/Desktop/Programación Actuarial lll") #session,  set working directory
+ data <- read.csv("Datos_S&P.csv")
+ data
+ data <- read.table("Datos_S&P.csv",T,",",nrows=100)
+ clases <- sapply(data,class)
+ data <- read.table("Datos_S&P.csv",T,",",colClasses=clases)
+ view(data)
+ data
+ clases
+ 
+ 
+ 
+ #USO DE dput y dget
+ y <- data.frame(a=1,b="a")
+ y
+ dput(y)  #Está describiendo a y
+ dput(y,file="y.R")   # Esta guardando el objeto en el archivo y, formato r
+ nueva.y <- dget("y.R")
+ nueva.y
+ y
+ 
+ x <- "Programación Actuarial III"
+ y <- data.frame(a=1,b="a")
+ dump(c("x","y"),file="data.R")  # se pone entre comillas para pegar el onbeto x y no programacion actuarial ...
+ rm(x,y)
+ source("data.R")
+ x
+ y
+ 
+ head(airquality)
+ 
+ 
+ x <- head(airquality)
+ dump(c("x"),file="headairqualityEileen.R")
+ rm(x)
+ source("headairqualityEileen.R")
+ x
+ 
+ 
+ 
+ 
+ con <- url("http://www.fcfm.buap.mx/","r")
+ x <- readLines(con,7)
+ x
+
+ #Subcnjuntos, se utiliza el corchete sencillo para la extraccion de elementos
+ x <- c("a","b","c","c","d","e")
+ x
+ x[1]   #se extraen los elementos 1 del vector x
+ x[2]
+ x[1:4]  #Se extrae una secuencia de elementos de x
+ x[x>"b"]
+ 
+ u <- x =="c"
+ u
+ x[u]
+ 
+ 
+ #Subcnjuntos de listas
+ x <- list(foo=1:4,bar=0.6)
+ x
+ x[1] #se extrae el primer elemento de la lista, este elemento es una lista que contiene una secuencia
+ x[[1]]   #se extrae el primer elemento de la lista, este elemento es la secuencia en sí
+ x$bar #se extrae un elemento por nombre
+ x[["bar"]] 
+ x["bar"]
+ 
+ 
  
  
  
