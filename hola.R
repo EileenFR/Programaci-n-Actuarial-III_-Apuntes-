@@ -307,7 +307,7 @@ dimnames(m)
  x <- readLines(con,7)
  x
 
- #Subcnjuntos, se utiliza el corchete sencillo para la extraccion de elementos
+ #Subcnjuntos, se utiliza el corchete sencillo para la extraccion de elementos, generalmente para dataframe
  x <- c("a","b","c","c","d","e")
  x
  x[1]   #se extraen los elementos 1 del vector x
@@ -329,8 +329,79 @@ dimnames(m)
  x[["bar"]] 
  x["bar"]
  
+ #la diferencia entre un corchete y 2 corchetes es q el primero extrae unna lista y el segundo lo extrae como secuencia
+ #el primero conserva la clase de lo q esta sacando, el segundo conservala clase del elemnto
+ #ambos tienen la capacidad de resolver operaciones
+ # $ se parece al doble corchete, no puede resolver operaciones
+ 
+ x <- list(foo=1:4,bar=0.6,baz="Hola")
+ x[c(1,3)]
+ 
+ x[[c(1,3)]] 
  
  
+ x <- list(foo=1:4,bar=0.6,baz="Hola")
+ name <- "foo"
+ x[[name]]
+ x$name
+ x$foo
  
+ 
+ #Se pueden extraer elementos de los elementos extraidos
+ x <- list(a=list(10,12,14),b=list(3.14,2.81))
+ x[[c(1,3)]] 
+ x[[1]][[3]]
+ x[[c(2,1)]]#primer elemento del segundo objeto
+ 
+ #Extraccion de objetos de una matriz
+ x <- matrix(1:6,2,3)
+ x
+ x[1,2] 
+ x[2,1]
+ x[1,]
+ x[,2]
+ 
+ x <- matrix(1:6,2,3)
+ x
+ x[1,2] #el resultado es un vector
+ x[1,2,drop=FALSE] #con drop=false, se mantiene la dimension y el resultado sera una matriz
+ 
+ x <- matrix(1:6,2,3)
+ x
+ x[1,] #si dejamos solamente el espacio el resultado sera solamente un valor
+ x[1, ,drop=FALSE] #con drop=false, el resultado sera una matriz
+ 
+ 
+ x <- list(aardvark=1:5)    #R puede encontrar el nombre de algunos objetos de manera
+ x$a                        #parcial con $, tambien podria hacerlo con doble corchete,
+ x[["a"]]                   #pero necesitariamos decir de forma explicita que queremos una coincidencia parcial
+ x[["a",exact=FALSE]]       # solo funciona con el doble corchete, con uno no funciona
+ 
+ 
+ #REMOVER VALORES FALTANTES
+ airquality[1:6,] #exraelas primeras 6 filas y como tiene  , vacio, entonces son las filas completas
+ completos <- complete.cases(airquality) #si  el registro de airquality esta completo devuelve TRUE, sino False
+ completos
+ airquality[completos,]  #extrae los valores completos, se le pone , para que ponga la fila completa, sin coma marca error
+ airquality[completos,][1:6,]#extrae los datos completos de las primeras 6 filas
+ airquality[1:6,][completos,]
+ 
+ 
+ #OPERACIONES VECTORIZADAS
+ x <- 1:4; y <- 6:9       #al poner una condicion el resultado es un verctor de logicos
+ x+y
+ x>2
+ x>=2
+ y ==8            #si necesito hacer una evaluacion logica del = , tengo que poner doble igual
+ x*y             #hace multiplicacion uno a uno
+ x/y
+   
+ 
+ #OPERACIONES CON MATRICES
+ x <- matrix(1:4,2,2); y <- matrix(rep(10,4),2,2) #rep repite un numero (10) una cierta cantidad de veces (4)
+ x; y
+ x*y
+ x/y
+ x%*%y      # &*% significa multiplicacion de matrices, todad¡s las demas operaciones son uno a uno
  
  
