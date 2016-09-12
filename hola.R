@@ -448,4 +448,68 @@ dimnames(m)
  
  #con seq_along todos los elementos de un vector los va mostrando secuencialmente
  #con seq_len  es una secuencia de un tamaño en particular
-      
+
+ 
+ 
+ 
+ #CLASE 12/SEP/16
+
+ 
+ #CICLOS WHILE
+ #Inician probando una condicion, si esta es verdadera, ejecutaran una serie de comandos
+ #alterminarlos se vuelve a poner a prueba
+ 
+ #a veces se evalua mas de una condicion
+ z <- 5
+ while (z>=3 && z<=10) {
+   print(z)
+   moneda <- rbinom(1,1,0.5)
+   if (moneda==1) {#Caminata Aleatoria
+     z <- z+1
+   } else {
+      z <- z-1
+    }
+ }
+ 
+ #las condiciones se evaluan de izquierda a derecha
+ 
+ 
+ #crear un vector donde le vayamos agregando mas entradas
+ z <- 5
+ caminata <- vector("numeric")
+ while (z>=3 && z<=10)  {
+   print(z)
+   caminata <- c(caminata,z)
+   moneda <- rbinom(1,1,0.5)
+   if (moneda==1) {#Caminata Aleatoria
+     z <- z+1
+   } else {
+     z <- z-1
+   }
+ }
+ plot(caminata)
+ caminata
+ 
+ 
+ 
+ #
+ z <- 5
+ caminata <- vector("numeric")
+ while (z>=3 && z<=10)  {
+   print(z)
+   caminata <- c(caminata,z)
+   moneda <- rbinom(1,1,0.5)
+   if (moneda==1) {#Caminata Aleatoria
+     z <- z + 0.5
+   } else {
+     z <- z - 0.5
+   }
+ }
+ plot(caminata)
+ caminata
+ str(caminata)
+ 
+ #el type en plot es para eltipo de grafico, en este caso 1 es linea
+ plot(caminata, type="l")
+ 
+ 
