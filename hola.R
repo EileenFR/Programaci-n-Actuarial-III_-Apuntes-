@@ -405,3 +405,47 @@ dimnames(m)
  x%*%y      # &*% significa multiplicacion de matrices, todad¡s las demas operaciones son uno a uno
  
  
+ 
+ #ESTRUCTURAS DE CONTROL
+ 
+ #Permiten manejar el flujo de la ejecucion de un programas,
+ #las estructuras mas comunes son if,else ; for; while ; repeat; break; next; return
+ #if, else   probar una condicion
+ #for, ejecuta un ciclo un determinado num de veces
+ # while,  ejecuta un ciclo mientras se cumpla una condicion
+ #repeat, ejecuta un ciclo infinito
+ #break, termina la ejecucion de un ciclo
+ #next, salta una iteracion de un ciclo
+ #return, sale de una funcion (dar un resultado)
+ 
+ 
+ #if-else
+ # if(<condicion>){ instrucciones  } else
+ #   if(<condicion1>)  {instrucciones}
+ 
+ #for
+ #  for(i in 1:10) {print(i) instrucciones}
+ #se parece mas al for each, toman una variable y le asignaran valores sucesivos de un vector
+ #los ciclos for se utilizan principalmente para realizar iteraciones con los elementos de un objeto
+ 
+ 
+ for(i in 1:10) {print(i) }
+ 
+ 
+ #crear una matriz de 2x3 con los numeros del 1 al 6 y luego imprimir x separado los elementos de de cada fila
+ #el primer elemento de la primera fila, luego el segundo y asi
+ x <- c("a","b","c","d")
+ for(i in 1:4) {print(x[i]) }
+ for(i in seq_along(x)) {print(x[i]) }  #no se sabe la longitud del objeto
+ for(letra in x) {print(letra) }
+ for(i in 1:4) print(x[i])  #si se trata de una sola instruccion se pueden omitir las llaves
+ 
+ x <- matrix(1:6,2,3)
+ x
+ for (i in seq_len(nrow(x))) {
+   for (j in seq_len(ncol(x))) { print(x[i,j]) }
+ }
+ 
+ #con seq_along todos los elementos de un vector los va mostrando secuencialmente
+ #con seq_len  es una secuencia de un tamaño en particular
+      
