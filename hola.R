@@ -513,3 +513,505 @@ dimnames(m)
  plot(caminata, type="l")
  
  
+ 
+ #Estructuras de control
+ 
+ #la instruccion repeat inicia un ciclo infinito que no parara
+ #hasta que se llame un break
+ 
+ x0 <- 1
+ tol <- 1e-8
+ repeat {
+   x1 <- CalculaEstimado(x0)
+   if(abs(x1-x0) < tol) {
+     break
+   }else{
+     x0 <- x1
+   }
+ }
+ 
+ #se utiliza next para no hacer una iteracion en un ciclo
+ #nos brincamos una iteracion
+ 
+ for(i in 1:100){
+   if(i<=20){
+     next
+     #evita hacer las primeras 20 iteraciones
+   }
+ }
+ 
+ 
+ 
+ #CREACION DE FUNCIONES
+ suma2 <- function(x,y){
+   x + y
+ }
+ View(suma2)
+ suma2(1,2)
+ 
+ 
+ mayor10 <- function(x){
+   x[x>10]
+ }
+ 
+ mayor10(1:20)
+ mayor10(runif(100,5,15))
+ 
+ 
+ 
+ mayorque <- function(x,n){
+   x[x>n]
+ }
+ 
+ mayorque(1:10,3)
+ 
+ 
+ promedioCol <- function(x, quitar.NA=TRUE) {
+   nc <- ncol(x)
+   medias <- vector("numeric",nc)
+   for(i in 1:nc){
+     medias[i] <- mean(x[,i],na.rm=quitar.NA)
+     #mean es para calcular promedios
+   }
+   medias
+ }
+ 
+ mean(c(1,2,3,NA))
+ mean(c(1,2,3,NA),na.rm=T)
+ 
+ 
+ promedioCol(c(1,2,3,NA))
+ promedioCol(as.matrix(c(1,2,3,NA)))
+ 
+ 
+ 
+ #EVALUACION PEREZOSA
+ #NO SE CALCULARA UNA EXPRESION HASTA QUE SU VALOR SEA NECESARIO
+ 
+ f <- function(a,b){
+   a^2
+ }
+ 
+ f(2,1)
+ f(2)
+ f(2,NA)
+ 
+ f <- function(a,b){
+   print(a)
+   prin(b)
+ }
+ 
+ f(2)
+ 
+ 
+ #arguumento ...
+ #indica que hay un num varia..b.le de argumentos q usualmente
+ #son pasados a otras funciones
+ #se usa cuando hay una serie de argumentos en la funcion
+ #original y no quieres escribirlos todos en una sub funcion
+ 
+ myplot <- function(x,y,type="l",...){
+   plot(x,y,type=type, ...)
+ }
+ 
+ #tambien se ocupa cuando el num de argumentos no puede ser conocidox anticipado
+ 
+ args(paste) #pegas distintas cadenas de texto, no siempre vamos a saber cuantas cadenas son
+ args(cat)
+ 
+ ?paste
+ 
+ #despues de usar ... al colocar un argumento debera ser nombrado y no podra nombrarsele parcialmente
+ args(paste)
+ paste("a","b",sep="")
+ 
+ 
+ 
+ 
+ 
+ #SCOPING RULES
+ 
+ lm
+ lm <- function(x){x*x} #estamos creando un nuevo valor de lm
+ lm
+ rm(lm)  #rm remueve lm de la memoria, cuando hacemos esto, lm regresa a su ambiente original
+ lm
+ 
+ 
+ search() #cuando se menciona un objeto en r, va a seguir este orden para buscarlo
+  
+ library(ggplot2) #cambiamos el orden de los paquetes
+ search()
+ 
+ 
+ 
+ #MBITO LEXICOLOGICO
+ 
+ hacer.potencia <- function(n){
+   potencia <- function(x){
+     x^n
+   }
+   potencia
+ }
+ 
+ cubica <- hacer.potencia(3)
+ cuadrada <- hacer.potencia(2)
+ cubica(3)
+ cuadrada(3)
+ 
+ #entorno de uuna funcion
+ ls(environment(cubica))
+ get("n",environment(cubica))
+ ls(environment(cuadrada))
+ get("n",environment(cuadrada))
+ 
+ 
+ 
+ #estatico vs dinamico
+ y <- 10
+ f <- function(x){
+   y <- 2
+   y^2+g(x)
+ }
+ g <- function(x){
+   x*y
+ }
+ #cuanto vale f(3)
+ f(3)
+ 
+ 
+ #ESTANDARES DE ESCRITURA
+ 
+ #fechas y tiempo
+ x <- as.Date("1970-01-01")
+ x
+ unclass(x)
+ unclass(as.Date("1970-01-02"))
+ 
+ 
+ date()
+ as.POSIXct.date()
+ 
+ x <- date()
+ x
+ as.POSIXct(x)
+ 
+ 
+ 
+ 
+ #clase 28/sep/16    || o
+ #funciones de ciclo
+ #ciclos internos, sin necesidad de for
+ 
+ lapply     # internal, lo resuelven en una base de c y lo regresan
+?match.fun   
+ 
+ 
+ x <- list(a=1:5,b=rnorm(10000))  #crea una lista de dos elementos, el primero una secuencia
+ lapply(x,mean)                   # elsegundo genera 10000 valores aleatorios(normales) de una normal estandar
+ # saca 2 resultados, el promedio de cada elemento de la lista x
+ 
+ 
+ x <- list(a=1:5,b=rnorm(10),c=rnorm(10,1),d=rnorm(10,2))  #d=10 num aleatorios con dist nrmal, media 2 y desv estandar 1
+ lapply(x,mean)
+ 
+ #convierte al vector en una lista
+ x <- 1:4   #secuencia de num, se recibe el primer elemento es 1, el segundo 2 y asi
+ lapply(x,runif)  #runif fenera numeros aleatorios con distribucion uniforme entre 0 y  uno
+ #para 1 genera un num aletorio para el 2 2 y asi
+ 
+ 
+ x <- 1:4  #x <- list(a=1,b=1:2,c=1:3)
+ lapply(x,runif,max=15,min=5)
+ 
+ 
+ #sapply simpifica el resultado de apply (en vectores, matriz o lo mismo q apply)
+ x <- list(a=1:5,b=rnorm(10),c=rnorm(10,3),d=rnorm(10,5))
+ lapply(x,mean) #devuelve un vector
+ sapply(x,mean)
+ 
+ 
+ x <- 1:4
+ lapply(x,runif,max=15,min=5)  #son iguales porque el tamaño es distinto
+ sapply(x,runif,max=15,min=5)
+ 
+ 
+ #apply
+ #evaluar una funcion, funciona de manera mas general
+ str(apply)    #llama a la estructura de apply
+ 
+ x <- matrix(rnorm(200),20,10)
+ x
+ #margen es un argumento de apply
+ apply(x,2,mean)  #promedia por columna xq son las variables, las filas son observcioes
+ #indice uno filas, indice 2 columnas
+ 
+ 
+ #sumasy medias de dim de una matriz, tenemos algunos atajos
+ #rowSums=apply(x,1,sum)
+ #rowMeans=apply(x,1,mean)
+ #...
+ 
+ 
+ x <- matrix(rnorm(200),20,10)
+ apply(x,1,quantile,probs=c(0.25,0.75))
+ 
+ 
+ # los asteriscos es xq lo puso en "arrehlos, 2 x 2 x10
+ a <- array(rnorm(2*2*10),c(2,2,10))  #un arreglo d dim 1 es un vector, de 2 es una matriz
+ a      # mas de 2 se puede decir q ya es un arreglo
+ apply(a,c(1,2),mean) #se aplica sobre 1 y 2, es el prom de los a1s de las 10 hojas, el b1s, etc
+ 
+ 
+ 
+ #Mapply
+ #apply multivariante, con mas d 1 variable
+ 
+ str(mapply)
+ 
+ list(rep(1,4),rep(2,3),rep(3,2),rep(4,1)) #4 elementos, el primero es el num 1 repetido4 veces y asi
+ mapply(rep,1:4,4:1)
+ #son equialentes
+ 
+ #Vectorizar una funcion
+ noise <- function(n,mean,sd){  #sd es desvicion estantar
+   rnorm(n,mean,sd)
+ }
+ 
+ noise(1,5,2)
+ noise(1:5,1:5,2)
+ noise(5,1,2)
+ 
+ 
+ mapply(noise,1:5,1:5,2)  #las 2 secuencias deben ser de mismo tamaño
+ 
+ # mapply aplicar de manera vextorizada los elementos de una funcion
+ 
+ 
+ #tapply
+ str(tapply)
+ 
+ x <- c(rnorm(10),runif(10),rnorm(10,1))
+ x
+ f <- gl(3,10)  # gl genera niveles, f es un factor de niveles
+ f
+ tapply(x,f,mean)
+ tapply(x,f,mean,simplify=F) #simplify los simplifica a un vector
+ 
+ 
+ 
+ ?gl
+ 
+ #29/sep/16
+ #SPLIT
+ str(split)
+ ?split
+ 
+ x <- c(rnorm(10),runif(10),rexp(10))
+ f <- gl(3,10)
+ f
+ split(x,f)  #separaen bloques los datos, y hace una lista de cada bloque
+ 
+ lapply(split(x,f),mean)
+ 
+ #split en data frame
+ library(datasets)
+ head(airquality)
+ 
+ 
+
+ #de airquality separarlo por mes
+ s <- split(airquality,airquality$Month)
+ lapply(s,function(x) colMeans(x[,1:3]))  #este tipo de funcion se llama nonima, no xq no tenga nombre no se puedeutilizar
+ 
+ sapply(s,function(x) colMeans(x[,1:4],na.rm=T))
+ 
+ 
+ #SPLIT A MAS DE UN NIVEL
+ x <- rnorm(10)
+ f1 <- gl(2,5)
+ f2 <- gl(5,2)
+ f1
+ f2
+ interaction(f1,f2)
+ x
+ str(split(x,list(f1,f2)))
+ 
+ 
+ 
+ #03/10/16
+ #Manejo de errores
+ 
+ log(-1)  #log de un num negativo no existe, solo lo guarda como nan, no detiene el codigo
+ 
+ imprimeMSJ <- function(x){
+   if(x>0)
+     print("x es mayor que 0")
+   else
+     print("x es menor o igual a 0")
+   invisible(x)
+ }
+ imprimeMSJ(1)
+ imprimeMSJ(NA) #no sabe si es T o F, detiene el codigo
+ 
+ imprimeMsj2 <- function(x){
+   if(is.na(x))
+     print("x es un  valor faltane")
+   else if(x>0)
+     print("x es mayor que 0")
+   else
+     print("x es menor que 0")
+   invisible(x)
+ }
+ 
+ x <- log(-1)
+ imprimeMsj2(x)
+ 
+ 
+ #existen funciones para depurar
+ 
+ #traceback
+ mean(x)
+ traceback()
+ lm(y)
+ 
+ 
+ 
+ opctions(error=recover)
+ ?Error
+ ?options
+ 
+ read.csv("perritosgay")
+ 
+ 
+ 
+ install.packages("swirl")
+ library("swirl")
+ swirl()
+ 
+ #hacer hasta la seccion 6
+ 
+ 
+ #05/10/16
+ #SIMULACION
+ 
+ str(str)
+ str(lm)
+ str(ls)
+ x <- rnorm(100)
+ str(x)
+ summary(x)
+ 
+ f <- gl(40,10)
+ f
+ str(f)
+ summary(f)
+ 
+ str(airquality)
+ m <- matrix(rnorm(100),10,10)
+ m
+ str(m)
+ 
+ s <- split(airquality, airquality$Month)
+ s
+ str(s)
+ 
+ 
+ x <- rnorm(10)
+ x
+ 
+ y <- rnorm(10, 50, 5)
+ y
+ 
+ summary(x)
+ summary(y)
+ 
+ set.seed(1) #semilla 1, a todos les genera los mismos num aleatorios
+ rnorm(5)
+ 
+ set.seed(2)
+ rnorm(5)
+ 
+ set.seed(1)
+ rnorm(5)
+ 
+ 
+ normal1 <- rnorm(10000)
+ normal2 <- rnorm(10000, 10, 5)
+ hist(normal1)  #grafica un histograma de los valores
+ summary(normal1)
+ 
+ hist(normal2)
+ summary(normal2)
+ 
+ rpois(10,1)
+ poisson1 <- rpois(10000,1)
+ poisson2 <- rpois(10000, 10)
+ hist(poisson1)
+ hist(poisson2)
+ ppois(2,2)
+ ppois(4,2)
+ ppois(6,2)
+ hist(rpois(10000,2))
+ 
+ x0 <- ppois(0,2)
+ x0
+ x1 <- ppois(1,2) - ppois(0,2)
+ x1
+ x2 <- ppois(2,2) - (x0 + x1)
+ x2
+ x3
+ 
+ x <- vector("numeric")
+ for(i in 0:13){
+   y <- ppois(i,2)
+   sum <- y + y
+   z <- y - sum
+   x <- c(x,z)
+   x
+ }
+ x
+ 
+ 
+ for(i in 0:13){ print(dpois(i,2))}
+ 
+ 
+ hist(runif(10000,10,20))
+ 
+ set.seed(20)
+ x <- rnorm(100)
+ e <- rnorm(100,0 ,2)
+ y <- 0.5 + 2*x + e
+ y
+ 
+ plot(x,y)
+ 
+ 
+ z <- 0.5 + 2*x
+ plot(x,z)
+ plot(z,y)  #plot grafico de dispersion
+ 
+ 
+ #06/octubre/16
+ #si se reduce el error se vuelve casi una linea recta
+ 
+ set.seed(10)
+ x <- rbinom(100,1,0.5)
+ x
+ e <- rnorm(100,2)
+ y <- 0.5 + 2*x + e
+ summary(y)
+ plot(x,y,main="Modelo Lineal", col="dark red")
+ 
+ ?plot
+ 
+ 
+ 
+ set.seed(1)
+ x <- rnorm(100)
+ log.mu <- 0.5 + 0.3*x
+ mu <- exp(log.mu)
+ y <- rpois(100,mu)
+ summary(y)
+ plot(x,y,main="Modelo Poisson", col="forestgreen")
+ 
